@@ -27,3 +27,7 @@ mlruns/
 
 # Jupyter
 .ipynb_checkpoints/
+
+# Datasets
+data/
+dataset/
