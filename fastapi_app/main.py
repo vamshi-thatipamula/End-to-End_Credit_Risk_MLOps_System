@@ -1,3 +1,8 @@
+# ==============================================================================
+# No application logic change.
+# This comment is added only to create a test commit for verifying the CI/CD pipeline.
+# ==============================================================================
+
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
 
