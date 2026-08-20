@@ -31,3 +31,15 @@ jobs:
 
       - name: Run tests
         run: python -m pytest tests/test_api.py
+
+  cd:
+    name: Continuous Deployment
+    needs: ci
+
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Trigger Render deployment
+        run: curl -X POST "${{ secrets.RENDER_DEPLOY_HOOK }}"
