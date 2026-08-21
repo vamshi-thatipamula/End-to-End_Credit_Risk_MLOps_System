@@ -177,6 +177,10 @@ The architecture will include:
 ```text
 end-to-end_credit_risk_mlops_system/
 │
+├── .github/
+│   └── workflows/
+│       └── ci-cd.yml
+│
 ├── app/
 │   ├── artifacts/
 │   │   └── model_data.joblib
@@ -208,12 +212,19 @@ end-to-end_credit_risk_mlops_system/
 │   ├── characteristic_stability_index_csi_summary.png
 │   ├── receiver_operating_characteristic_curve.png
 │   ├── render_deployed_fastapi_application.png
-│   └── render_deployment_dashboard.png
+│   ├── render_deployment_dashboard.png
+│   ├── github_actions_ci_cd_pipeline.png
+│   ├── render_automated_deployment.png
+│   └── automated_model_monitoring_and_alerting.png
 │
 ├── notebook_files/
 │   ├── ml_credit_risk_modelling.ipynb
 │   ├── ml_flow_credit_risk_mlops.ipynb
-│   └── data_drift_monitoring_psi_csi.ipynb
+│   ├── data_drift_monitoring_psi_csi.ipynb
+│   └── automated_model_monitoring_alerting.ipynb
+│
+├── tests/
+│   └── test_api.py
 │
 ├── .gitignore
 ├── README.md
@@ -454,9 +465,59 @@ The analysis resulted in a **PSI of 0.7537**, indicating a significant shift in 
 
 > **Note:** The reference and test data used for the PSI and CSI analysis were provided as part of the course/project materials and are not included in this repository. The test data used for this drift analysis was not directly collected from the deployed Render application. Therefore, the PSI and CSI results demonstrate the implementation and interpretation of model monitoring techniques rather than representing actual production drift from the deployed application.
 
+---
+
 ### 12.9 CI/CD Pipeline
 
+A **Continuous Integration and Continuous Deployment (CI/CD) pipeline** was implemented using **GitHub Actions and Render** to automate the testing and deployment of the FastAPI model-serving application.
+
+Whenever changes are pushed to the `main` branch, GitHub Actions automatically executes the CI pipeline. The pipeline checks out the latest source code, sets up the required Python 3.11 environment, installs the dependencies from `requirements.txt`, and executes the automated API tests using `pytest`.
+
+The API tests use a **mocked prediction-helper/model dependency**, so the CI environment can validate the FastAPI application's behavior without downloading the actual MLflow/DagsHub champion model. The tests verify important API behavior including the root endpoint, health endpoint, request validation, and prediction endpoint.
+
+![GitHub Actions CI/CD Pipeline](images/github_actions_ci_cd_pipeline.png)
+
+If all CI tests pass successfully, the CD stage is triggered automatically. The GitHub Actions workflow then uses a **Render Deploy Hook**, stored securely as a GitHub Actions repository secret, to trigger a new deployment of the FastAPI application on Render.
+
+![Render Automated Deployment](images/render_automated_deployment.png)
+
+#### Security
+
+The Render Deploy Hook URL is stored securely as the GitHub Actions repository secret `RENDER_DEPLOY_HOOK` rather than being exposed directly in the workflow file.
+
+The workflow accesses the secret using:
+
+```text
+${{ secrets.RENDER_DEPLOY_HOOK }}
+```
+---
+
 ### 12.10 Automated Model Monitoring & Alerting
+
+This automated model monitoring and alerting workflow evaluates the stability of prediction probabilities and selected input features by comparing the reference and test datasets using Population Stability Index (PSI) and Characteristic Stability Index (CSI).
+
+PSI is used to measure changes in the distribution of prediction probabilities between the reference and test populations. CSI is used to measure distribution changes across the selected numerical and categorical features. The calculated PSI and CSI values are evaluated against predefined thresholds to automatically determine the level of distribution drift.
+
+For PSI, values below 0.10 indicate no significant drift, values between 0.10 and 0.2 indicate moderate drift, and values of 0.2 or above indicate significant drift. The same threshold framework is applied to CSI for this automated monitoring workflow.
+
+The PSI and CSI results are then combined to determine the overall monitoring status. If significant drift is detected in either the prediction probability distribution or any monitored feature, the overall monitoring status is classified as **significant drift detected** and an alert is generated.
+
+The monitoring results obtained from the provided reference and test datasets were:
+
+- **PSI Status:** Significant drift
+- **CSI Status:** No significant drift
+- **Overall Monitoring Status:** Significant drift detected
+- **Alert Status:** ALERT
+
+The results indicate that a significant change was detected in the distribution of prediction probabilities between the reference and test populations. At the same time, the CSI analysis did not identify significant distributional changes across the monitored features based on the defined threshold.
+
+Since the PSI result indicated significant drift, the overall monitoring status was classified as **significant drift detected**, which automatically triggered the alert. This demonstrates the complete monitoring workflow, from calculating drift metrics and evaluating predefined thresholds to determining the overall monitoring status and generating an alert.
+
+The monitoring workflow is designed to support early identification of distribution changes that may require further investigation. A significant drift alert does not by itself indicate that the underlying system has failed; rather, it highlights a change that should be investigated further to understand its potential cause and impact.
+
+![Automated Model Monitoring and Alerting](images/automated_model_monitoring_and_alerting.png)
+
+> **Note:** The reference and test data used for this monitoring exercise were provided as part of the course/project materials and are not included in the project's GitHub repository. The monitoring data was not directly collected from the deployed Render application. Therefore, this automated model monitoring and alerting workflow demonstrates the implementation of drift detection and alert generation rather than representing actual production drift monitoring.
 
 ---
 
