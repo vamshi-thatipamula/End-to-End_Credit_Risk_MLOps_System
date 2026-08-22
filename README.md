@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/project_banner.png" alt="Credit Risk MLOps System Banner" width="100%">
+  <img src="assets/project_banner.png" alt="End-to-End Credit Risk MLOps System">
 </p>
 
 # Credit Risk MLOps System
@@ -123,6 +123,7 @@ This project is created strictly for educational and portfolio demonstration pur
 | **Cloud Deployment**                     | Render                                                                                            |
 | **Model Serialization**                  | Joblib                                                                                            |
 | **Version Control**                      | Git, GitHub                                                                                       |
+| **Architecture**                         | draw.io                                                                                           |
 
 ---
 
@@ -148,27 +149,48 @@ This evolution transformed the project from a standalone machine learning applic
 
 **Phase 2 builds directly on the machine learning solution developed in Phase 1.** The final model selected in Phase 1 — an **Optuna-optimized Logistic Regression model using SMOTE-Tomek** — serves as the foundation for the MLOps implementation.
 
-The processed, model-ready data and preprocessing artifacts from Phase 1 were reused for model training and experiment tracking in Phase 2. The selected model was then integrated with **MLflow and DagsHub** for experiment tracking, model registration, versioning, and Champion model management.
+As part of the MLOps implementation, the model development experiments were reproduced and tracked using **MLflow**, with the experiments and model information centralized through **DagsHub**. The selected model was then registered, versioned, validated, and promoted as the **Champion Model** in the MLflow Model Registry.
 
-The Phase 1 prediction logic was also extended into a **FastAPI model-serving application**, while the existing **Streamlit application** remains available as the interactive user interface.
+The Phase 1 prediction logic was extended into a **FastAPI model-serving application**, while the existing **Streamlit application** remains available as the interactive user interface.
 
-Phase 2 therefore focuses on taking the validated Phase 1 model from a development environment toward a **production-oriented ML system**, adding model serving, cloud deployment, monitoring, CI/CD, and automated model monitoring and alerting.
+Phase 2 therefore focuses on taking the validated Phase 1 model from a development environment toward a **production-oriented ML system**, adding experiment tracking, model management, model serving, cloud deployment, API testing, drift detection, CI/CD, and automated model monitoring and alerting.
 
 ---
 
 ## 9. Model & MLOps Architecture
 
-The architecture integrates the **Phase 1 credit risk modelling workflow** with the **Phase 2 MLOps workflow**, covering model development, experiment tracking, model management, serving, deployment, monitoring, and automation.
+The architecture illustrates the complete workflow from **data cleaning, exploratory analysis, feature engineering, and model development** to **experiment tracking, model management, model serving, cloud deployment, drift detection, CI/CD automation, and automated model monitoring**.
 
-The architecture will include:
+### Phase 1 – Credit Risk Model Development
 
-* **Phase 1 – Model Development:** Data preparation → Feature Engineering → Model Training → Model Evaluation → Final Model
-* **MLflow & DagsHub:** Experiment Tracking → Model Registry → Champion Model
-* **Model Serving:** FastAPI → Preprocessing → Champion Model → Prediction
-* **Deployment:** GitHub → Render → Production FastAPI Application
-* **Monitoring:** PSI & CSI → Model/Data Drift Detection
-* **CI/CD:** Automated build, testing, and deployment workflow
-* **Automated Monitoring & Alerting:** Continuous monitoring → Drift detection → Alerts
+The model development phase follows the complete machine learning workflow:
+
+* **Data Preparation:** Raw Data → Data Cleaning & Preparation → Exploratory Data Analysis (EDA)
+* **Feature Engineering:** Transformation of the prepared data into model-ready features
+* **Model Development:** Model Training & Evaluation → Model Fine-Tuning
+* **Model Evaluation:** Model Evaluation using KS & Gini
+* **Final Model Selection:** Selection of the best-performing model from the evaluated experiments
+* **Final Model & Preprocessing Artifacts:** Saved model and preprocessing components required for the prediction
+* **Streamlit Application:** Interactive application for credit risk prediction
+
+### Phase 2 – Credit Risk MLOps Implementation
+
+The MLOps implementation starts with the **Processed & Model-Ready Data from Phase 1**, allowing the machine learning experiments to proceed without repeating the complete data cleaning and feature engineering workflow.
+
+* **Experiment Tracking:** MLflow – Experiment Tracking
+* **Model Management:** MLflow – Model Registry → Champion Model
+* **Centralized MLflow Infrastructure:** Centralized MLflow Server using DagsHub
+* **Model Serving:** FastAPI Model Serving
+* **API Testing:** API Testing with Postman
+* **Cloud Deployment:** FastAPI Application Deployment using Render
+* **Deployed API Validation:** Testing the Deployed API with Postman
+* **Drift Detection:** Population Stability Index (PSI) and Characteristic Stability Index (CSI)
+* **CI/CD:** CI/CD with GitHub Actions for automated testing and deployment
+* **Automated Monitoring & Alerting:** Automated model monitoring and alerting workflow
+
+### Architecture Diagram
+
+![Credit Risk MLOps System – Project Architecture](project_architecture/credit_risk_mlops_system_project_architecture.png)
 
 ---
 
@@ -223,6 +245,10 @@ end-to-end_credit_risk_mlops_system/
 │   ├── data_drift_monitoring_psi_csi.ipynb
 │   └── automated_model_monitoring_alerting.ipynb
 │
+├── project_architecture/
+│   ├── credit_risk_mlops_system_project_architecture.drawio
+│   └── credit_risk_mlops_system_project_architecture.png
+│
 ├── tests/
 │   └── test_api.py
 │
@@ -233,7 +259,7 @@ end-to-end_credit_risk_mlops_system/
 
 ---
 
-## 11. Credit Risk Model Development – Phase 1
+## 11. Phase 1 – Credit Risk Model Development
 
 Phase 1 focused on developing the **Credit Risk Model** from raw customer, loan, and credit bureau data through data preparation, feature engineering, model development, evaluation, and integration into a Streamlit application. The workflow was designed to prevent data leakage, identify meaningful predictors of default, address class imbalance, and evaluate model performance using standard classification metrics — **Precision, Recall, F1-Score, and ROC-AUC** along with credit-risk-specific metrics — **KS Statistic, Gini Coefficient, and Decile Analysis**.
 
@@ -325,7 +351,7 @@ The application provides the **probability of loan default**, converts the proba
 
 ---
 
-## 12. MLOps Implementation – Phase 2
+## 12. Phase 2 – Credit Risk MLOps Implementation
 
 Phase 2 focused on transforming the **Credit Risk Model developed in Phase 1** into a more structured and production-oriented machine learning system. The workflow introduced MLflow experiment tracking and model registry, centralized MLflow management using DagsHub, FastAPI model serving, API testing with Postman, cloud deployment using Render, and model monitoring using PSI and CSI.
 
