@@ -23,7 +23,7 @@ An end-to-end **Credit Risk MLOps System** for Lauki Finance that combines machi
 
 > **FastAPI Model-Serving Application:** The application is hosted on Render's **Free instance** and it may take approximately one minute to respond to the first request after a period of inactivity.
 
-**[Open the Deployed FastAPI Application](YOUR_RENDER_URL)**
+**[Open the Deployed FastAPI Application](https://end-to-end-credit-risk-mlops-system.onrender.com)**
 
 ---
 
