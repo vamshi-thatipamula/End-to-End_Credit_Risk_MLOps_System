@@ -491,8 +491,6 @@ The analysis resulted in a **PSI of 0.7537**, indicating a significant shift in 
 
 > **Note:** The reference and test data used for the PSI and CSI analysis were provided as part of the course/project materials and are not included in this repository. The test data used for this drift analysis was not directly collected from the deployed Render application. Therefore, the PSI and CSI results demonstrate the implementation and interpretation of model monitoring techniques rather than representing actual production drift from the deployed application.
 
----
-
 ### 12.9 CI/CD Pipeline
 
 A **Continuous Integration and Continuous Deployment (CI/CD) pipeline** was implemented using **GitHub Actions and Render** to automate the testing and deployment of the FastAPI model-serving application.
@@ -516,7 +514,6 @@ The workflow accesses the secret using:
 ```text
 ${{ secrets.RENDER_DEPLOY_HOOK }}
 ```
----
 
 ### 12.10 Automated Model Monitoring & Alerting
 
