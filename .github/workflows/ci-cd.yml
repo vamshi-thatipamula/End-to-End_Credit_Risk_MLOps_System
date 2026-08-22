@@ -4,10 +4,20 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'fastapi_app/**'
+      - 'tests/**'
+      - 'requirements.txt'
+      - '.github/workflows/ci-cd.yml'
 
   pull_request:
     branches:
       - main
+    paths:
+      - 'fastapi_app/**'
+      - 'tests/**'
+      - 'requirements.txt'
+      - '.github/workflows/ci-cd.yml'
 
 jobs:
   ci:
